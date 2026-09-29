@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PDF Intelligence — Study Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F4;
+    --rule-blue: #C7D2E0;
+    --margin-red: #C0555099;
+    --ink: #1F2937;
+    --ink-soft: #5B6472;
+    --navy: #24344D;
+    --navy-deep: #16223A;
+    --red-pen: #B23B32;
+    --red-pen-bg: #FBEDEB;
+    --card: #FFFFFF;
+    --border: #E1DCC9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image: radial-gradient(circle, #C9BFA0 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -4px -4px;
+    color: var(--ink);
+    font-family: "Source Serif 4", Georgia, serif;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 32px 90px 64px;
+    position: relative;
+    border-left: 2px solid var(--margin-red);
+  }
+
+  .page::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: calc(50% - 430px + 40px);
+    width: 2px;
+    height: 100vh;
+    pointer-events: none;
+  }
+
+  header {
+    padding: 40px 0 22px;
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red-pen);
+    font-weight: 700;
+  }
+
+  h1 {
+    font-family: "Lora", serif;
+    font-size: 34px;
+    font-weight: 600;
+    margin: 6px 0 8px;
+    color: var(--navy-deep);
+  }
+
+  .subhead {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 480px;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 26px 28px;
+    margin-bottom: 24px;
+  }
+
+  .step-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .step-label .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--paper);
+    font-size: 11px;
+  }
+
+  .dropzone {
+    border: 1.5px dashed var(--border);
+    border-radius: 4px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  .dropzone:hover, .dropzone.drag-over {
+    border-color: var(--navy);
+    background: #F1F4F8;
+  }
+
+  .dropzone .hint { color: var(--ink-soft); font-size: 13px; margin-top: 6px; }
+  .dropzone .filename { font-weight: 600; color: var(--navy); font-family: "Lora", serif; }
+
+  input[type="file"] { display: none; }
+
+  button {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 11px 24px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  button:hover { background: var(--navy-deep); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .status-line {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+    margin-top: 14px;
+    color: var(--ink-soft);
+  }
+  .status-line.ok { color: #2E6E4E; }
+  .status-line.err { color: var(--red-pen); }
+
+  .qa-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .qa-row input[type="text"] {
+    flex: 1;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .qa-row input[type="text"]:focus {
+    outline: none;
+    border-color: var(--navy);
+  }
+
+  #answerArea { margin-top: 24px; }
+
+  .answer-text {
+    font-size: 19px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+
+  .sources-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 26px 0 14px;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+  }
+
+  .stamp {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+    animation: stampIn 0.28s ease-out;
+  }
+
+  @keyframes stampIn {
+    from { opacity: 0; transform: scale(0.9) rotate(-6deg); }
+    to { opacity: 1; transform: scale(1) rotate(-2deg); }
+  }
+
+  .stamp-badge {
+    flex-shrink: 0;
+    border: 2px solid var(--red-pen);
+    color: var(--red-pen);
+    background: var(--red-pen-bg);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 3px;
+    transform: rotate(-2deg);
+    text-align: center;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .stamp-badge .page-num { display: block; font-size: 15px; }
+
+  .snippet-block {
+    flex: 1;
+    border-left: 3px solid var(--rule-blue);
+    padding: 2px 0 2px 14px;
+  }
+
+  .snippet {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.55;
+    font-family: "Source Serif 4", Georgia, serif;
+  }
+
+  .empty-state {
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    text-align: center;
+    padding: 22px 0;
+  }
+
+  .loader {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .feature-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 26px 0 30px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .feature-icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #EDF1F7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy);
+  }
+
+  .feature-text .ft-title {
+    font-family: "Lora", serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-deep);
+    margin: 0 0 2px;
+  }
+
+  .feature-text .ft-sub {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ribbon {
+    position: absolute;
+    top: 0;
+    right: 40px;
+    width: 26px;
+    height: 64px;
+    background: var(--red-pen);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+    opacity: 0.85;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .chip {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12.5px;
+    color: var(--navy);
+    background: #EDF1F7;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .chip:hover {
+    background: #DFE7F1;
+    border-color: var(--navy);
+  }
+
+  .howto {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 6px 0 10px;
+  }
+
+  .howto-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .howto-num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule-blue);
+    color: var(--navy);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .howto-text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  .howto-text b { color: var(--navy-deep); font-weight: 600; }
+
+  .doc-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .doc-badge {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px;
+    color: var(--navy-deep);
+    background: #EDF1F7;
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+
+  .reset-link {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px;
+    color: var(--red-pen);
+    background: none;
+    border: none;
+    padding: 5px 0 0;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .turn {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .turn:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .turn-question {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .flash-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ghost-btn {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--border);
+  }
+  .ghost-btn:hover { background: #EDF1F7; }
+
+  .flash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .flash-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    cursor: pointer;
+    perspective: 800px;
+    min-height: 100px;
+  }
+
+  .flash-q {
+    font-family: "Lora", serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-deep);
+    margin: 0 0 8px;
+  }
+
+  .flash-a {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    display: none;
+  }
+
+  .flash-card.flipped .flash-a { display: block; }
+  .flash-card.flipped .flash-hint { display: none; }
+
+  .flash-hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .flash-page {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--red-pen);
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding-left: 28px; }
+    h1 { font-size: 27px; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="ribbon"></div>
+      <div class="eyebrow">Retrieval-augmented study tool</div>
+      <h1>Ask your textbook directly</h1>
+      <div class="subhead">Upload a chapter or notes PDF, then ask a question. Every answer is checked against the source and marked with the exact page — like a teacher grading against the book.</div>
+
+      <div class="feature-strip">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <div class="feature-text">
+            <p class="ft-title">Grounded in your PDF</p>
+            <p class="ft-sub">No answers outside the uploaded text</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <div class="feature-text">
+            <p class="ft-title">Page-cited answers</p>
+            <p class="ft-sub">Every claim traces to a page number</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <div class="feature-text">
+            <p class="ft-title">Fast retrieval</p>
+            <p class="ft-sub">FAISS semantic search over chunks</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="step-label"><span class="num">1</span>Load a document</div>
+      <div class="dropzone" id="dropzone">
+        <div id="dropzoneText">Drop a PDF here, or click to choose a file</div>
+        <div class="hint">Textbook chapters, notes, question banks — drop more than one to search across all of them</div>
+      </div>
+      <input type="file" id="fileInput" accept="application/pdf" />
+      <div class="status-line" id="uploadStatus"></div>
+      <div class="doc-badges" id="docBadges"></div>
+      <button class="reset-link" id="resetBtn" style="display:none;">Clear all documents</button>
+    </div>
+
+    <div class="card">
+      <div class="step-label"><span class="num">2</span>Ask a question</div>
+      <div class="qa-row">
+        <input type="text" id="questionInput" placeholder="e.g. What is a flexible budget?" />
+        <button id="askBtn">Ask</button>
+      </div>
+      <div class="chips">
+        <span class="chip" data-q="Define the key terms in this chapter">Define key terms</span>
+        <span class="chip" data-q="Explain this topic with an example">Explain with example</span>
+        <span class="chip" data-q="Summarize this chapter in points">Summarize in points</span>
+      </div>
+
+      <div id="answerArea">
+        <div class="howto">
+          <div class="howto-row">
+            <div class="howto-num">1</div>
+            <div class="howto-text"><b>Upload</b> a chapter, notes, or question-bank PDF above.</div>
+          </div>
+          <div class="howto-row">
+            <div class="howto-num">2</div>
+            <div class="howto-text"><b>Ask</b> a question in plain language, just like you'd ask a classmate. Follow-up questions remember what you just asked.</div>
+          </div>
+          <div class="howto-row">
+            <div class="howto-num">3</div>
+            <div class="howto-text"><b>Get an answer</b> with the exact page it came from, so you can double-check it yourself.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flash-toggle-row">
+        <div class="step-label" style="margin-bottom:0;"><span class="num">3</span>Revise with flashcards</div>
+        <button class="ghost-btn" id="flashBtn">Generate flashcards</button>
+      </div>
+      <div id="flashArea"></div>
+    </div>
+
+  </div>
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000";
+
+  const dropzone = document.getElementById("dropzone");
+  const dropzoneText = document.getElementById("dropzoneText");
+  const fileInput = document.getElementById("fileInput");
+  const uploadStatus = document.getElementById("uploadStatus");
+  const docBadges = document.getElementById("docBadges");
+  const resetBtn = document.getElementById("resetBtn");
+  const questionInput = document.getElementById("questionInput");
+  const askBtn = document.getElementById("askBtn");
+  const answerArea = document.getElementById("answerArea");
+  const flashBtn = document.getElementById("flashBtn");
+  const flashArea = document.getElementById("flashArea");
+
+  let hasAnsweredOnce = false;
+
+  dropzone.addEventListener("click", () => fileInput.click());
+
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.classList.add("drag-over");
+  });
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag-over"));
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("drag-over");
+    if (e.dataTransfer.files.length) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files.length) handleFile(fileInput.files[0]);
+  });
+
+  function renderDocBadges(documents) {
+    if (!documents || !documents.length) {
+      docBadges.innerHTML = "";
+      resetBtn.style.display = "none";
+      return;
+    }
+    docBadges.innerHTML = documents.map((d) => `<span class="doc-badge">${escapeHtml(d)}</span>`).join("");
+    resetBtn.style.display = "inline-block";
+  }
+
+  async function handleFile(file) {
+    if (file.type !== "application/pdf") {
+      uploadStatus.textContent = "Please choose a PDF file.";
+      uploadStatus.className = "status-line err";
+      return;
+    }
+
+    dropzoneText.innerHTML = `Drop another PDF, or click to add one`;
+    uploadStatus.innerHTML = `<span class="loader"></span>Indexing "${escapeHtml(file.name)}" — this can take a moment...`;
+    uploadStatus.className = "status-line";
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch(`${API_BASE}/upload`, { method: "POST", body: formData });
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+      const data = await res.json();
+      uploadStatus.textContent = `Indexed — ${data.num_chunks} chunks added.`;
+      uploadStatus.className = "status-line ok";
+      renderDocBadges(data.documents);
+    } catch (err) {
+      uploadStatus.textContent = `Couldn't index the document. Is the backend running at ${API_BASE}?`;
+      uploadStatus.className = "status-line err";
+    }
+  }
+
+  resetBtn.addEventListener("click", async () => {
+    try {
+      await fetch(`${API_BASE}/reset`, { method: "POST" });
+    } catch (err) {
+      // even if the backend call fails, still clear the local UI state
+    }
+    renderDocBadges([]);
+    dropzoneText.textContent = "Drop a PDF here, or click to choose a file";
+    uploadStatus.textContent = "";
+    hasAnsweredOnce = false;
+    answerArea.innerHTML = `
+      <div class="howto">
+        <div class="howto-row"><div class="howto-num">1</div><div class="howto-text"><b>Upload</b> a chapter, notes, or question-bank PDF above.</div></div>
+        <div class="howto-row"><div class="howto-num">2</div><div class="howto-text"><b>Ask</b> a question in plain language, just like you'd ask a classmate. Follow-up questions remember what you just asked.</div></div>
+        <div class="howto-row"><div class="howto-num">3</div><div class="howto-text"><b>Get an answer</b> with the exact page it came from, so you can double-check it yourself.</div></div>
+      </div>`;
+    flashArea.innerHTML = "";
+  });
+
+  async function askQuestion() {
+    const question = questionInput.value.trim();
+    if (!question) return;
+
+    askBtn.disabled = true;
+
+    if (!hasAnsweredOnce) {
+      answerArea.innerHTML = "";
+      hasAnsweredOnce = true;
+    }
+
+    const turnEl = document.createElement("div");
+    turnEl.className = "turn";
+    turnEl.innerHTML = `
+      <div class="turn-question">${escapeHtml(question)}</div>
+      <div class="turn-answer"><span class="loader"></span>Thinking...</div>`;
+    answerArea.appendChild(turnEl);
+    questionInput.value = "";
+
+    try {
+      const formData = new FormData();
+      formData.append("question", question);
+      formData.append("use_history", "true");
+
+      const res = await fetch(`${API_BASE}/query`, { method: "POST", body: formData });
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+      const data = await res.json();
+      renderAnswerInto(turnEl.querySelector(".turn-answer"), data);
+    } catch (err) {
+      turnEl.querySelector(".turn-answer").innerHTML =
+        `Couldn't reach the backend. Make sure it's running and a PDF has been uploaded.`;
+    } finally {
+      askBtn.disabled = false;
+    }
+  }
+
+  function renderAnswerInto(container, data) {
+    let html = `<div class="answer-text">${escapeHtml(data.answer)}</div>`;
+
+    if (data.sources && data.sources.length) {
+      html += `<div class="sources-label">Verified against source</div>`;
+      data.sources.forEach((s) => {
+        html += `
+          <div class="stamp">
+            <div class="stamp-badge">Verified<span class="page-num">p.${s.page}</span></div>
+            <div class="snippet-block">
+              <div class="snippet">${escapeHtml(s.snippet || "")}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    container.innerHTML = html;
+  }
+
+  flashBtn.addEventListener("click", async () => {
+    flashBtn.disabled = true;
+    flashArea.innerHTML = `<div class="empty-state"><span class="loader"></span>Generating flashcards from the document...</div>`;
+
+    try {
+      const res = await fetch(`${API_BASE}/flashcards?count=8`);
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+      const data = await res.json();
+      renderFlashcards(data.flashcards || []);
+    } catch (err) {
+      flashArea.innerHTML = `<div class="empty-state">Couldn't generate flashcards. Make sure a PDF is uploaded and the backend is running.</div>`;
+    } finally {
+      flashBtn.disabled = false;
+    }
+  });
+
+  function renderFlashcards(cards) {
+    if (!cards.length) {
+      flashArea.innerHTML = `<div class="empty-state">No flashcards could be generated from this document.</div>`;
+      return;
+    }
+
+    flashArea.innerHTML = `<div class="flash-grid">${cards.map((c) => `
+      <div class="flash-card">
+        <p class="flash-q">${escapeHtml(c.question)}</p>
+        <p class="flash-a">${escapeHtml(c.answer)}</p>
+        <div class="flash-hint">Tap to reveal answer</div>
+        <div class="flash-page">Page ${c.page ?? "?"}</div>
+      </div>`).join("")}</div>`;
+
+    flashArea.querySelectorAll(".flash-card").forEach((card) => {
+      card.addEventListener("click", () => card.classList.toggle("flipped"));
+    });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  askBtn.addEventListener("click", askQuestion);
+  questionInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") askQuestion();
+  });
+
+  document.querySelectorAll(".chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      questionInput.value = chip.dataset.q;
+      questionInput.focus();
+    });
+  });
+
+  // Restore any documents already indexed from a previous session (page refresh).
+  (async () => {
+    try {
+      const res = await fetch(`${API_BASE}/documents`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.documents && data.documents.length) {
+          renderDocBadges(data.documents);
+          dropzoneText.textContent = "Drop another PDF, or click to add one";
+        }
+      }
+    } catch (err) {
+      // backend not reachable yet -- fine, user hasn't done anything wrong
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+[
+  {
+    "question": "What is management accounting?",
+    "baseline_answer": "Management accounting is the process of collecting, analyzing, and reporting financial and non‑financial information to help internal managers make informed decisions. It focuses on cost analysis, budgeting, forecasting, performance measurement, and strategic planning rather than external reporting. The goal is to improve operational efficiency, support decision‑making, and drive organizational performance.",
+    "rag_answer": "Management accounting is the process of identifying, measuring, accumulating, analysing, preparing, interpreting and communicating financial information that is used by management to plan, evaluate and control activities within an organisation, ensuring appropriate use of and accountability for its resources. It provides managers with both financial and non‑financial data to aid decision‑making.",
+    "rag_sources": [
+      {
+        "page": 3,
+        "score": 0.725
+      }
+    ]
+  },
+  {
+    "question": "What is a budget?",
+    "baseline_answer": "A budget is a financial plan that estimates how much money will be earned and spent over a specific period, helping you manage resources, set goals, and control spending.",
+    "rag_answer": "A budget is a formal quantitative statement prepared in advance, expressing management's plans for a specified future period in financial and/or non-financial terms.",
+    "rag_sources": [
+      {
+        "page": 14,
+        "score": 0.57
+      }
+    ]
+  },
+  {
+    "question": "What is marginal costing?",
+    "baseline_answer": "**Marginal costing** (also called variable costing) is a costing method that treats only variable production costs (direct materials, direct labour, variable overhead) as product costs.  \nAll fixed manufacturing costs are treated as period costs and expensed in the period incurred.  \n\nKey points:\n- The cost of producing one additional unit is the **marginal cost** (variable cost per unit).  \n- The difference between sales revenue and variable cost per unit is the **contribution margin**.  \n- Used for short‑term decision making (e.g., pricing, make‑or‑buy, product mix).  \n- Provides a clearer view of how incremental production affects profit.",
+    "rag_answer": "Marginal costing is a costing technique in which only variable costs are charged to products; fixed costs are treated as period costs and expensed in the period incurred. It focuses on the contribution (sales minus variable cost) to cover fixed costs and generate profit.",
+    "rag_sources": [
+      {
+        "page": 15,
+        "score": 0.551
+      },
+      {
+        "page": 23,
+        "score": 0.452
+      }
+    ]
+  },
+  {
+    "question": "What is break-even analysis?",
+    "baseline_answer": "Break‑even analysis is a financial tool that calculates the point at which a company’s total revenue equals its total costs, resulting in neither profit nor loss. It uses:\n\n- **Fixed costs** (costs that don’t change with volume)  \n- **Variable cost per unit** (cost that changes with each unit produced/sold)  \n- **Selling price per unit**\n\nThe break‑even quantity is found with:\n\n\\[\n\\text{Break‑even units} = \\frac{\\text{Fixed costs}}{\\text{Price per unit} - \\text{Variable cost per unit}}\n\\]\n\nMultiplying that quantity by the price gives the break‑even sales revenue. This analysis helps businesses set pricing, plan production, and assess the viability of projects.",
+    "rag_answer": "Break‑even analysis is the calculation of the level of output or sales at which total revenue equals total cost, resulting in neither profit nor loss. It is also called the \"no‑profit‑no‑loss point.\"",
+    "rag_sources": [
+      {
+        "page": 17,
+        "score": 0.31
+      }
+    ]
+  },
+  {
+    "question": "What is the difference between fixed cost and variable cost?",
+    "baseline_answer": "**Fixed cost** – a cost that does not change with the level of production or sales (e.g., rent, salaries, insurance).  \n**Variable cost** – a cost that rises or falls directly with the quantity produced or sold (e.g., raw materials, direct labor, shipping).  \n\nSo, fixed costs stay the same over a period, while variable costs vary with output.",
+    "rag_answer": "Variable cost changes with the level of production or sales, whereas fixed cost remains constant regardless of how much is produced or sold.",
+    "rag_sources": [
+      {
+        "page": 16,
+        "score": 0.548
+      },
+      {
+        "page": 15,
+        "score": 0.547
+      }
+    ]
+  },
+  {
+    "question": "What is a flexible budget?",
+    "baseline_answer": "A **flexible budget** is a budget that adjusts its cost and revenue projections to match the actual level of activity (e.g., units produced, sales volume, hours worked). Unlike a static budget, which is fixed at a single level of activity, a flexible budget recalculates expected costs and revenues for whatever volume actually occurs, allowing managers to compare performance more accurately and identify variances that are due to changes in activity rather than inefficiency.",
+    "rag_answer": "A flexible budget is a budget that changes with the level of activity (output). It provides different cost targets for different output levels and is more realistic than a fixed budget.",
+    "rag_sources": [
+      {
+        "page": 14,
+        "score": 0.536
+      }
+    ]
+  },
+  {
+    "question": "what is the main importance of management?",
+    "baseline_answer": "Management’s main importance is to coordinate people, resources, and processes so that an organization can achieve its goals efficiently and effectively. It aligns individual efforts with strategic objectives, optimizes resource use, and adapts to changing conditions.",
+    "rag_answer": "The main importance of management accounting is to assist management in planning, controlling, and decision‑making by providing relevant financial and non‑financial information.",
+    "rag_sources": [
+      {
+        "page": 4,
+        "score": 0.329
+      }
+    ]
+  },
+  {
+    "question": "Give some basic terminology use in management accounting and also define them.",
+    "baseline_answer": "**Key Management‑Accounting Terms & Quick Definitions**\n\n| Term | Definition |\n|------|------------|\n| **Cost** | The monetary value of resources consumed to produce a product or service. |\n| **Cost Object** | Anything for which a cost is measured (e.g., product, project, department). |\n| **Cost Center** | A unit or department that incurs costs but does not directly generate revenue; performance is judged by cost control. |\n| **Profit Center** | A unit that both incurs costs and generates revenue; performance measured by profitability. |\n| **Cost Allocation** | The process of assigning indirect costs (overheads) to cost objects. |\n| **Standard Costing** | Predetermined costs used as benchmarks for measuring performance and calculating variances. |\n| **Variance Analysis** | The comparison of actual costs to standard or budgeted costs, identifying favorable or unfavorable differences. |\n| **Activity‑Based Costing (ABC)** | A costing method that assigns overhead to products based on the activities that drive costs. |\n| **Contribution Margin** | Sales revenue minus variable costs; the amount that contributes to covering fixed costs and profit. |\n| **Break‑Even Point** | The level of sales at which total revenue equals total costs (no profit, no loss). |\n| **Budget** | A financial plan that projects revenues, expenses, and cash flows over a future period. |\n| **Capital Budgeting** | The evaluation and selection of long‑term investment projects (e.g., new equipment, facilities). |\n| **Cost‑Volume‑Profit (CVP) Analysis** | Examines how changes in cost, volume, and price affect profit. |\n| **Direct Cost** | Costs that can be traced directly to a cost object (e.g., raw materials). |\n| **Indirect Cost (Overhead)** | Costs that cannot be traced directly to a single cost object (e.g., utilities, rent). |\n| **Fixed Cost** | Costs that remain constant in total regardless of activity level (e.g., lease payments). |\n| **Variable Cost** | Costs that change in direct proportion to activity level (e.g., raw material usage). |\n| **Sunk Cost** | A cost that has already been incurred and cannot be recovered; irrelevant to future decisions. |\n| **Opportunity Cost** | The benefit foregone by choosing one alternative over another; considered in decision‑making. |\n| **Balanced Scorecard** | A performance framework that links financial and non‑financial metrics to strategy. |\n\nThese terms form the foundation of management accounting and are essential for planning, controlling, and decision‑making within an organization.",
+    "rag_answer": "Management Accounting: the process of identification, measurement, accumulation, analysis, preparation, interpretation, and communication of financial information used by management to plan, evaluate, and control within an organisation and to assure appropriate use of and accountability for its resources.\nFinancial Statement Analysis: the process of critically examining financial data contained in financial statements with the objective of making economic decisions.\nBudgetary Control: planning and controlling through budgets.\nStandard Costing: setting standards and measuring variances.\nVariance Analysis: analysis of differences between actual and standard costs.\nMarginal Costing: cost‑volume‑profit analysis.\nCapital Budgeting: long‑term investment decisions.\nRatio Analysis: meaning, utility & classification of ratios.\nFund Flow Statement: concept & preparation of the fund flow statement.\nCash Flow Statement: AS‑3 – preparation of the cash flow statement.\nManagement Accountant: prepares financial and accounting reports for use by internal management; duties include maintaining management information systems, preparing budgets, cost reports, variance analysis, and financial forecasts.",
+    "rag_sources": [
+      {
+        "page": 3,
+        "score": 0.719
+      },
+      {
+        "page": 2,
+        "score": 0.605
+      },
+      {
+        "page": 5,
+        "score": 0.574
+      }
+    ]
+  },
+  {
+    "question": "what is the duty, status of management accounting?",
+    "baseline_answer": "**Duty of Management Accounting**  \n- **Cost control & analysis** – track, allocate, and reduce costs.  \n- **Budgeting & forecasting** – prepare financial plans and projections.  \n- **Performance measurement** – evaluate units, products, and projects.  \n- **Decision support** – provide timely data for pricing, outsourcing, investment, and other managerial choices.  \n- **Strategic planning** – align financial goals with long‑term strategy.\n\n**Status**  \n- **Internal, managerial tool** – used by managers, not for external reporting.  \n- **Decision‑making engine** – central to operational and strategic decisions.  \n- **Dynamic and forward‑looking** – focuses on future performance rather than historical compliance.",
+    "rag_answer": "Duties: Maintaining management information systems, preparing budgets, cost reports, variance analysis, and financial forecasts. Status: A senior position in the organisational hierarchy that reports directly to the CFO or top management and participates in policy decisions.",
+    "rag_sources": [
+      {
+        "page": 5,
+        "score": 0.557
+      }
+    ]
+  },
+  {
+    "question": "What is PROFITABILITY RATIOS?",
+    "baseline_answer": "**Profitability ratios** are financial metrics that evaluate a company’s ability to generate earnings relative to its revenue, assets, equity, or capital invested. They help assess how effectively a business turns sales or resources into profit.\n\n| Ratio | What it measures | Typical formula |\n|-------|------------------|-----------------|\n| **Gross Profit Margin** | Profit after cost of goods sold | (Gross Profit ÷ Revenue) × 100 |\n| **Operating Profit Margin** | Profit after operating expenses | (Operating Income ÷ Revenue) × 100 |\n| **Net Profit Margin** | Bottom‑line profit | (Net Income ÷ Revenue) × 100 |\n| **Return on Assets (ROA)** | Earnings generated per dollar of assets | (Net Income ÷ Total Assets) × 100 |\n| **Return on Equity (ROE)** | Earnings generated per dollar of shareholders’ equity | (Net Income ÷ Shareholders’ Equity) × 100 |\n| **Return on Investment (ROI)** | Gain or loss relative to invested capital | (Net Gain ÷ Investment) × 100 |\n\nThese ratios are used by investors, analysts, and managers to gauge operational efficiency, pricing strategy, cost control, and overall financial health.",
+    "rag_answer": "Profitability ratios are a set of financial metrics that measure a company's ability to generate profit relative to its sales, assets, or equity. They assess how efficiently a business turns its inputs into earnings and include ratios such as Gross Profit Ratio, Net Profit Ratio, Operating Profit Ratio, Return on Capital Employed (ROCE), Return on Equity (ROE), Return on Assets (ROA), and Earnings Per Share (EPS).",
+    "rag_sources": [
+      {
+        "page": 8,
+        "score": 0.669
+      }
+    ]
+  },
+  {
+    "question": "Explain fund flow statement?",
+    "baseline_answer": "**Fund Flow Statement (also called Statement of Changes in Working Capital)**  \nA fund flow statement shows how a company’s working‑capital (current assets minus current liabilities) changes over a period. It links the balance‑sheet changes to the income statement, revealing the sources and uses of funds that affect liquidity.\n\n**Key components**\n\n| Source of Funds | Use of Funds |\n|-----------------|--------------|\n| Increase in current assets (e.g., higher inventory, receivables) | Increase in current liabilities (e.g., higher payables, accrued expenses) |\n| Increase in current liabilities | Increase in current assets |\n| Net profit (or loss) | Net profit (or loss) – it is treated as a source (or use) of funds because it affects retained earnings, which is part of working capital |\n\n**How it’s prepared**\n\n1. **Start with the opening working capital** (current assets – current liabilities).  \n2. **Add all sources** (increases in liabilities, decreases in assets, net profit).  \n3. **Subtract all uses** (increases in assets, decreases in liabilities, net loss).  \n4. **Result is the closing working capital**.\n\n**Purpose**\n\n- Highlights how the company’s liquidity position has changed.  \n- Helps management assess whether the firm is generating sufficient funds internally or relying on external financing.  \n- Complements the balance sheet and income statement by focusing on the “flow” of funds rather than just the “stock” of assets and liabilities.",
+    "rag_answer": "A fund flow statement shows the sources and uses of funds during an accounting period and explains why working capital changed between two balance‑sheet dates. It is prepared by first calculating working capital at the beginning and end of the period and the change in working capital. Next, the profit and loss statement is adjusted to find funds from operations. Sources of funds include items such as issue of shares or debentures, long‑term borrowings, increase in reserves, and funds from operations. Applications of funds include purchase of fixed assets, repayment of long‑term loans, dividends paid, and other uses that reduce funds. The statement balances the total sources against the total applications plus the change in working capital, thereby showing how the company’s financial position has evolved.",
+    "rag_sources": [
+      {
+        "page": 11,
+        "score": 0.556
+      },
+      {
+        "page": 12,
+        "score": 0.499
+      }
+    ]
+  }
+]
